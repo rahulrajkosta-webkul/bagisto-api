@@ -18,6 +18,8 @@ class WarmApiPlatformCacheCommand extends Command
 
     public function handle(): int
     {
+        $this->warnWhenDebugDisablesTheCache();
+
         $nameFactory = app(ResourceNameCollectionFactoryInterface::class);
         $metadataFactory = app(ResourceMetadataCollectionFactoryInterface::class);
 
@@ -51,5 +53,23 @@ class WarmApiPlatformCacheCommand extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    /**
+     * API Platform stores property metadata in the per-request `array` store whenever
+     * `app.debug` is true, so warming it writes to a bag that is thrown away when the
+     * process ends. Every request then rebuilds the metadata for every resource, which on
+     * a surface this size costs seconds per request and can exhaust max_execution_time.
+     * Without this notice the command reports a warmed cache that does not exist.
+     */
+    protected function warnWhenDebugDisablesTheCache(): void
+    {
+        if (! config('app.debug')) {
+            return;
+        }
+
+        $this->components->warn('APP_DEBUG is true, so API Platform is using the per-request "array" metadata store and nothing warmed below survives the process. Set APP_DEBUG=false and re-run this command, or every request will rebuild the metadata for every resource.');
+
+        $this->newLine();
     }
 }

@@ -33,7 +33,7 @@ class OptimizeApiPlatformCommand extends Command
 
         if (config('app.debug')) {
             $this->newLine();
-            $this->components->warn('APP_DEBUG is currently true. For faster responses set APP_DEBUG=false in your .env (debug mode adds error-collector overhead to every request), then re-run this command.');
+            $this->components->warn('APP_DEBUG is currently true, which makes API Platform hold its metadata in the per-request "array" store — the warm-up above was discarded and every request rebuilds the metadata for every resource. Set APP_DEBUG=false in your .env, then re-run this command.');
         }
 
         return self::SUCCESS;

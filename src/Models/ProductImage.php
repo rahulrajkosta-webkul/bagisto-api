@@ -15,6 +15,7 @@ use Webkul\BagistoApi\Resolver\BaseQueryItemResolver;
 use Webkul\BagistoApi\State\CursorAwareCollectionProvider;
 use Webkul\BagistoApi\State\ProductImageProvider;
 use Webkul\Product\Models\ProductImage as BaseProductImage;
+use Webkul\Product\Models\ProductImageTranslation;
 
 #[ApiResource(
     routePrefix: '/api/shop',
@@ -140,6 +141,17 @@ use Webkul\Product\Models\ProductImage as BaseProductImage;
 )]
 class ProductImage extends BaseProductImage
 {
+    /**
+     * v2.4 made product images translatable (`alt_text`), and the translatable trait
+     * derives the translation class from the model it is used on — which here is this
+     * subclass, so it looks for a `ProductImageTranslation` in the API namespace and
+     * fatals. Alt text is not part of this resource, so the parent's translation model is
+     * named rather than wrapped.
+     *
+     * @var string
+     */
+    protected $translationModel = ProductImageTranslation::class;
+
     protected $visible = [
         'id',
         'type',
