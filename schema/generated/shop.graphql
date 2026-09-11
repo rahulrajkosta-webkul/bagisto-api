@@ -3916,7 +3916,7 @@ type ThemeCustomizationTranslation implements Node {
   _id: Int!
   sectionId: String!
   locale: String!
-  options: String!
+  options: String
 }
 
 "Cursor connection for ThemeCustomizationTranslation."

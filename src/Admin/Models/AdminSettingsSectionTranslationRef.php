@@ -35,6 +35,17 @@ class AdminSettingsSectionTranslationRef extends Model
         'options' => 'array',
     ];
 
+    /**
+     * `normalizationContext` keeps drafts out of the serialized payload, but the GraphQL
+     * type is built from the table's columns, so the draft column has to be hidden too or
+     * it surfaces as a `draftOptions` field on the type.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'draft_options',
+    ];
+
     #[ApiProperty(identifier: true, writable: false)]
     public function getId(): ?int
     {
