@@ -8,7 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Input DTO for POST /api/admin/settings/themes.
  *
- * Mirrors Bagisto admin ThemeController::store validation:
+ * Mirrors Bagisto admin Appearance\SectionController::store validation:
  *   - name: required
  *   - sort_order: required, numeric
  *   - type: required, in (product_carousel, category_carousel, static_content,
@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Note: options upload (image_carousel/services_content slides + static_content
  * inline images) is deferred — only path strings are accepted in v1.
  */
-class AdminSettingsThemeCreateInput
+class AdminSettingsSectionCreateInput
 {
     #[ApiProperty(description: 'Theme customization name.')]
     #[Groups(['mutation'])]

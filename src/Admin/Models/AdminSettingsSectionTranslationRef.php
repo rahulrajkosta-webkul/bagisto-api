@@ -7,9 +7,9 @@ use ApiPlatform\Metadata\ApiResource;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Theme translation — nested sub-resource of AdminSettingsTheme (`translations`
- * connection). Backed by `theme_customization_translations` as a plain HasMany
- * (standard FK `theme_customization_id` → no pivot gotcha).
+ * Theme translation — nested sub-resource of AdminSettingsSection (`translations`
+ * connection). Backed by `theme_section_translations` as a plain HasMany
+ * (standard FK `section_id` → no pivot gotcha).
  *
  * `options` is genuinely dynamic theme-config JSON, so it stays a JSON scalar
  * node field (never objectified). `locale` surfaces as `locale`, the row id as
@@ -21,10 +21,10 @@ use Illuminate\Database\Eloquent\Model;
     graphQlOperations: [],
     normalizationContext: ['attributes' => ['id', 'locale', 'options']],
 )]
-class AdminSettingsThemeTranslationRef extends Model
+class AdminSettingsSectionTranslationRef extends Model
 {
     /** @var string */
-    protected $table = 'theme_customization_translations';
+    protected $table = 'theme_section_translations';
 
     /** @var bool */
     public $timestamps = false;

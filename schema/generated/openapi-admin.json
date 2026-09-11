@@ -9376,7 +9376,7 @@
                     {
                         "name": "type",
                         "in": "query",
-                        "description": "Stat group: over-all (default), today, stock-threshold-products, total-sales, total-visitors, top-selling-products, top-customers.",
+                        "description": "Stat group: over-all (default), today, stock-threshold-products, total-sales, top-selling-products, top-customers.",
                         "required": false,
                         "deprecated": false,
                         "schema": {
@@ -9386,7 +9386,6 @@
                                 "today",
                                 "stock-threshold-products",
                                 "total-sales",
-                                "total-visitors",
                                 "top-selling-products",
                                 "top-customers"
                             ]
@@ -15236,7 +15235,6 @@
                             "type": "string",
                             "enum": [
                                 "total-customers",
-                                "customers-traffic",
                                 "customers-with-most-sales",
                                 "customers-with-most-orders",
                                 "customers-with-most-reviews",
@@ -15440,7 +15438,6 @@
                             "type": "string",
                             "enum": [
                                 "total-customers",
-                                "customers-traffic",
                                 "customers-with-most-sales",
                                 "customers-with-most-orders",
                                 "customers-with-most-reviews",
@@ -15622,7 +15619,6 @@
                                 "top-selling-products-by-revenue",
                                 "top-selling-products-by-quantity",
                                 "products-with-most-reviews",
-                                "products-with-most-visits",
                                 "last-search-terms",
                                 "top-search-terms"
                             ]
@@ -15828,7 +15824,6 @@
                                 "top-selling-products-by-revenue",
                                 "top-selling-products-by-quantity",
                                 "products-with-most-reviews",
-                                "products-with-most-visits",
                                 "last-search-terms",
                                 "top-search-terms"
                             ]
@@ -27111,7 +27106,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsThemeRestDto"
+                                        "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsSectionRestDto"
                                     }
                                 }
                             },
@@ -27119,7 +27114,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsThemeRestDto.html"
+                                        "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsSectionRestDto.html"
                                     }
                                 }
                             }
@@ -27263,12 +27258,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsThemeRestDto"
+                                    "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsSectionRestDto"
                                 }
                             },
                             "text/html": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsThemeRestDto.html"
+                                    "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsSectionRestDto.html"
                                 }
                             }
                         },
@@ -27487,12 +27482,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsThemeRestDto"
+                                    "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsSectionRestDto"
                                 }
                             },
                             "text/html": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsThemeRestDto.html"
+                                    "$ref": "#/components/schemas/AdminSettingsTheme.AdminSettingsSectionRestDto.html"
                                 }
                             }
                         }
@@ -33349,7 +33344,7 @@
             },
             "AdminReportingCustomers": {
                 "type": "object",
-                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-traffic, customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
+                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -33420,7 +33415,7 @@
             },
             "AdminReportingCustomers.csv": {
                 "type": "object",
-                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-traffic, customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
+                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -33491,7 +33486,7 @@
             },
             "AdminReportingCustomers.html": {
                 "type": "object",
-                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-traffic, customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
+                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -33562,7 +33557,7 @@
             },
             "AdminReportingCustomers.xls": {
                 "type": "object",
-                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-traffic, customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
+                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -33633,7 +33628,7 @@
             },
             "AdminReportingCustomers.xlsx": {
                 "type": "object",
-                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-traffic, customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
+                "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -33852,7 +33847,7 @@
             },
             "AdminReportingProducts": {
                 "type": "object",
-                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, products-with-most-visits,\n  last-search-terms, top-search-terms.",
+                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, last-search-terms, top-search-terms.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -33923,7 +33918,7 @@
             },
             "AdminReportingProducts.csv": {
                 "type": "object",
-                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, products-with-most-visits,\n  last-search-terms, top-search-terms.",
+                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, last-search-terms, top-search-terms.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -33994,7 +33989,7 @@
             },
             "AdminReportingProducts.html": {
                 "type": "object",
-                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, products-with-most-visits,\n  last-search-terms, top-search-terms.",
+                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, last-search-terms, top-search-terms.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -34065,7 +34060,7 @@
             },
             "AdminReportingProducts.xls": {
                 "type": "object",
-                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, products-with-most-visits,\n  last-search-terms, top-search-terms.",
+                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, last-search-terms, top-search-terms.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -34136,7 +34131,7 @@
             },
             "AdminReportingProducts.xlsx": {
                 "type": "object",
-                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, products-with-most-visits,\n  last-search-terms, top-search-terms.",
+                "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, last-search-terms, top-search-terms.",
                 "properties": {
                     "entity": {
                         "readOnly": true,
@@ -39957,7 +39952,7 @@
             },
             "AdminSettingsTheme": {
                 "type": "object",
-                "description": "Admin Settings → Themes (theme customizations).\n\nMirrors Webkul\\Admin\\Http\\Controllers\\Settings\\ThemeController.\n\nBagisto \"Themes\" are per-channel theme customization blocks (image carousels,\nstatic content, footer links, etc.) — NOT a registry of installable themes.\nEach row picks a `type` from a fixed set and stores arbitrary per-locale\n`options` JSON via translation rows.\n\nREST:\n  GET    /api/admin/settings/themes\n  GET    /api/admin/settings/themes/{id}\n  POST   /api/admin/settings/themes\n  PUT    /api/admin/settings/themes/{id}\n  DELETE /api/admin/settings/themes/{id}\n\nGraphQL: adminSettingsThemes, adminSettingsTheme,\n         createAdminSettingsTheme, updateAdminSettingsTheme,\n         deleteAdminSettingsTheme\n\nDeferred (v1):\n  - Image uploads under `options.images[*].image` / `options.services[*].service_icon`\n    and the `static_content` inline image-pick action. Accept path strings only.\n  - The two-step admin upload flow (`store` with `id` param + multipart) — not exposed.",
+                "description": "Admin Settings → Themes (theme sections).\n\nMirrors Webkul\\Admin\\Http\\Controllers\\Appearance\\SectionController.\n\nBagisto \"Themes\" here are per-channel theme sections (image carousels, static\ncontent, footer links, etc.) — NOT a registry of installable themes. Each row\npicks a `type` from a fixed set and stores arbitrary per-locale `options` JSON\nvia translation rows. v2.4 renamed these from theme customizations to sections\nand moved the admin screens under Appearance; the REST paths and GraphQL names\nbelow are unchanged, so existing clients keep working.\n\nREST:\n  GET    /api/admin/settings/themes\n  GET    /api/admin/settings/themes/{id}\n  POST   /api/admin/settings/themes\n  PUT    /api/admin/settings/themes/{id}\n  DELETE /api/admin/settings/themes/{id}\n\nGraphQL: adminSettingsThemes, adminSettingsTheme,\n         createAdminSettingsTheme, updateAdminSettingsTheme,\n         deleteAdminSettingsTheme\n\nDeferred (v1):\n  - Image uploads under `options.images[*].image` / `options.services[*].service_icon`\n    and the `static_content` inline image-pick action. Accept path strings only.\n  - The two-step admin upload flow (`store` with `id` param + multipart) — not exposed.",
                 "properties": {
                     "id": {
                         "readOnly": true,
@@ -40012,9 +40007,9 @@
                     }
                 }
             },
-            "AdminSettingsTheme.AdminSettingsThemeRestDto": {
+            "AdminSettingsTheme.AdminSettingsSectionRestDto": {
                 "type": "object",
-                "description": "Admin Settings → Themes (theme customizations).\n\nMirrors Webkul\\Admin\\Http\\Controllers\\Settings\\ThemeController.\n\nBagisto \"Themes\" are per-channel theme customization blocks (image carousels,\nstatic content, footer links, etc.) — NOT a registry of installable themes.\nEach row picks a `type` from a fixed set and stores arbitrary per-locale\n`options` JSON via translation rows.\n\nREST:\n  GET    /api/admin/settings/themes\n  GET    /api/admin/settings/themes/{id}\n  POST   /api/admin/settings/themes\n  PUT    /api/admin/settings/themes/{id}\n  DELETE /api/admin/settings/themes/{id}\n\nGraphQL: adminSettingsThemes, adminSettingsTheme,\n         createAdminSettingsTheme, updateAdminSettingsTheme,\n         deleteAdminSettingsTheme\n\nDeferred (v1):\n  - Image uploads under `options.images[*].image` / `options.services[*].service_icon`\n    and the `static_content` inline image-pick action. Accept path strings only.\n  - The two-step admin upload flow (`store` with `id` param + multipart) — not exposed.",
+                "description": "Admin Settings → Themes (theme sections).\n\nMirrors Webkul\\Admin\\Http\\Controllers\\Appearance\\SectionController.\n\nBagisto \"Themes\" here are per-channel theme sections (image carousels, static\ncontent, footer links, etc.) — NOT a registry of installable themes. Each row\npicks a `type` from a fixed set and stores arbitrary per-locale `options` JSON\nvia translation rows. v2.4 renamed these from theme customizations to sections\nand moved the admin screens under Appearance; the REST paths and GraphQL names\nbelow are unchanged, so existing clients keep working.\n\nREST:\n  GET    /api/admin/settings/themes\n  GET    /api/admin/settings/themes/{id}\n  POST   /api/admin/settings/themes\n  PUT    /api/admin/settings/themes/{id}\n  DELETE /api/admin/settings/themes/{id}\n\nGraphQL: adminSettingsThemes, adminSettingsTheme,\n         createAdminSettingsTheme, updateAdminSettingsTheme,\n         deleteAdminSettingsTheme\n\nDeferred (v1):\n  - Image uploads under `options.images[*].image` / `options.services[*].service_icon`\n    and the `static_content` inline image-pick action. Accept path strings only.\n  - The two-step admin upload flow (`store` with `id` param + multipart) — not exposed.",
                 "properties": {
                     "id": {
                         "readOnly": true,
@@ -40110,9 +40105,9 @@
                     }
                 }
             },
-            "AdminSettingsTheme.AdminSettingsThemeRestDto.html": {
+            "AdminSettingsTheme.AdminSettingsSectionRestDto.html": {
                 "type": "object",
-                "description": "Admin Settings → Themes (theme customizations).\n\nMirrors Webkul\\Admin\\Http\\Controllers\\Settings\\ThemeController.\n\nBagisto \"Themes\" are per-channel theme customization blocks (image carousels,\nstatic content, footer links, etc.) — NOT a registry of installable themes.\nEach row picks a `type` from a fixed set and stores arbitrary per-locale\n`options` JSON via translation rows.\n\nREST:\n  GET    /api/admin/settings/themes\n  GET    /api/admin/settings/themes/{id}\n  POST   /api/admin/settings/themes\n  PUT    /api/admin/settings/themes/{id}\n  DELETE /api/admin/settings/themes/{id}\n\nGraphQL: adminSettingsThemes, adminSettingsTheme,\n         createAdminSettingsTheme, updateAdminSettingsTheme,\n         deleteAdminSettingsTheme\n\nDeferred (v1):\n  - Image uploads under `options.images[*].image` / `options.services[*].service_icon`\n    and the `static_content` inline image-pick action. Accept path strings only.\n  - The two-step admin upload flow (`store` with `id` param + multipart) — not exposed.",
+                "description": "Admin Settings → Themes (theme sections).\n\nMirrors Webkul\\Admin\\Http\\Controllers\\Appearance\\SectionController.\n\nBagisto \"Themes\" here are per-channel theme sections (image carousels, static\ncontent, footer links, etc.) — NOT a registry of installable themes. Each row\npicks a `type` from a fixed set and stores arbitrary per-locale `options` JSON\nvia translation rows. v2.4 renamed these from theme customizations to sections\nand moved the admin screens under Appearance; the REST paths and GraphQL names\nbelow are unchanged, so existing clients keep working.\n\nREST:\n  GET    /api/admin/settings/themes\n  GET    /api/admin/settings/themes/{id}\n  POST   /api/admin/settings/themes\n  PUT    /api/admin/settings/themes/{id}\n  DELETE /api/admin/settings/themes/{id}\n\nGraphQL: adminSettingsThemes, adminSettingsTheme,\n         createAdminSettingsTheme, updateAdminSettingsTheme,\n         deleteAdminSettingsTheme\n\nDeferred (v1):\n  - Image uploads under `options.images[*].image` / `options.services[*].service_icon`\n    and the `static_content` inline image-pick action. Accept path strings only.\n  - The two-step admin upload flow (`store` with `id` param + multipart) — not exposed.",
                 "properties": {
                     "id": {
                         "readOnly": true,
@@ -40210,7 +40205,7 @@
             },
             "AdminSettingsTheme.html": {
                 "type": "object",
-                "description": "Admin Settings → Themes (theme customizations).\n\nMirrors Webkul\\Admin\\Http\\Controllers\\Settings\\ThemeController.\n\nBagisto \"Themes\" are per-channel theme customization blocks (image carousels,\nstatic content, footer links, etc.) — NOT a registry of installable themes.\nEach row picks a `type` from a fixed set and stores arbitrary per-locale\n`options` JSON via translation rows.\n\nREST:\n  GET    /api/admin/settings/themes\n  GET    /api/admin/settings/themes/{id}\n  POST   /api/admin/settings/themes\n  PUT    /api/admin/settings/themes/{id}\n  DELETE /api/admin/settings/themes/{id}\n\nGraphQL: adminSettingsThemes, adminSettingsTheme,\n         createAdminSettingsTheme, updateAdminSettingsTheme,\n         deleteAdminSettingsTheme\n\nDeferred (v1):\n  - Image uploads under `options.images[*].image` / `options.services[*].service_icon`\n    and the `static_content` inline image-pick action. Accept path strings only.\n  - The two-step admin upload flow (`store` with `id` param + multipart) — not exposed.",
+                "description": "Admin Settings → Themes (theme sections).\n\nMirrors Webkul\\Admin\\Http\\Controllers\\Appearance\\SectionController.\n\nBagisto \"Themes\" here are per-channel theme sections (image carousels, static\ncontent, footer links, etc.) — NOT a registry of installable themes. Each row\npicks a `type` from a fixed set and stores arbitrary per-locale `options` JSON\nvia translation rows. v2.4 renamed these from theme customizations to sections\nand moved the admin screens under Appearance; the REST paths and GraphQL names\nbelow are unchanged, so existing clients keep working.\n\nREST:\n  GET    /api/admin/settings/themes\n  GET    /api/admin/settings/themes/{id}\n  POST   /api/admin/settings/themes\n  PUT    /api/admin/settings/themes/{id}\n  DELETE /api/admin/settings/themes/{id}\n\nGraphQL: adminSettingsThemes, adminSettingsTheme,\n         createAdminSettingsTheme, updateAdminSettingsTheme,\n         deleteAdminSettingsTheme\n\nDeferred (v1):\n  - Image uploads under `options.images[*].image` / `options.services[*].service_icon`\n    and the `static_content` inline image-pick action. Accept path strings only.\n  - The two-step admin upload flow (`store` with `id` param + multipart) — not exposed.",
                 "properties": {
                     "id": {
                         "readOnly": true,
@@ -40267,7 +40262,7 @@
             },
             "AdminSettingsThemeMassDelete": {
                 "type": "object",
-                "description": "Mass-delete admin settings theme customizations.\n\nREST:    POST /api/admin/settings/themes/mass-delete\nGraphQL: createAdminSettingsThemeMassDelete\n\nMirrors Bagisto admin ThemeController::massDestroy. Non-existent IDs are\nsilently skipped (matches monolith — best-effort loop).",
+                "description": "Mass-delete admin settings theme sections.\n\nREST:    POST /api/admin/settings/themes/mass-delete\nGraphQL: createAdminSettingsThemeMassDelete\n\nA bulk convenience this API adds on top of Appearance\\SectionController::destroy;\nv2.4 dropped the admin panel's own mass-delete screen. Non-existent IDs are\nsilently skipped (best-effort loop).",
                 "properties": {
                     "id": {
                         "readOnly": true,
@@ -40297,7 +40292,7 @@
             },
             "AdminSettingsThemeMassDelete.html": {
                 "type": "object",
-                "description": "Mass-delete admin settings theme customizations.\n\nREST:    POST /api/admin/settings/themes/mass-delete\nGraphQL: createAdminSettingsThemeMassDelete\n\nMirrors Bagisto admin ThemeController::massDestroy. Non-existent IDs are\nsilently skipped (matches monolith — best-effort loop).",
+                "description": "Mass-delete admin settings theme sections.\n\nREST:    POST /api/admin/settings/themes/mass-delete\nGraphQL: createAdminSettingsThemeMassDelete\n\nA bulk convenience this API adds on top of Appearance\\SectionController::destroy;\nv2.4 dropped the admin panel's own mass-delete screen. Non-existent IDs are\nsilently skipped (best-effort loop).",
                 "properties": {
                     "id": {
                         "readOnly": true,
@@ -40327,7 +40322,7 @@
             },
             "AdminSettingsThemeMassUpdateStatus": {
                 "type": "object",
-                "description": "Mass-update status admin settings theme customizations.\n\nREST:    POST /api/admin/settings/themes/mass-update-status\nGraphQL: createAdminSettingsThemeMassUpdateStatus\n\nMirrors Bagisto admin ThemeController::massUpdate which calls\nThemeCustomizationRepository::massUpdateStatus.",
+                "description": "Mass-update status admin settings theme sections.\n\nREST:    POST /api/admin/settings/themes/mass-update-status\nGraphQL: createAdminSettingsThemeMassUpdateStatus\n\nDelegates to SectionRepository::massUpdateStatus. A bulk convenience this API\nadds on top of Appearance\\SectionController::status, which toggles one section.",
                 "properties": {
                     "id": {
                         "readOnly": true,
@@ -40357,7 +40352,7 @@
             },
             "AdminSettingsThemeMassUpdateStatus.html": {
                 "type": "object",
-                "description": "Mass-update status admin settings theme customizations.\n\nREST:    POST /api/admin/settings/themes/mass-update-status\nGraphQL: createAdminSettingsThemeMassUpdateStatus\n\nMirrors Bagisto admin ThemeController::massUpdate which calls\nThemeCustomizationRepository::massUpdateStatus.",
+                "description": "Mass-update status admin settings theme sections.\n\nREST:    POST /api/admin/settings/themes/mass-update-status\nGraphQL: createAdminSettingsThemeMassUpdateStatus\n\nDelegates to SectionRepository::massUpdateStatus. A bulk convenience this API\nadds on top of Appearance\\SectionController::status, which toggles one section.",
                 "properties": {
                     "id": {
                         "readOnly": true,
@@ -41062,7 +41057,7 @@
         },
         {
             "name": "Admin Dashboard",
-            "description": "Admin dashboard statistics (read-only).\n\nREST   : GET /api/admin/dashboard/stats\nGraphQL: adminDashboardStats query\n\nMirrors `Webkul\\Admin\\Http\\Controllers\\DashboardController::stats()`.\nThe `type` query param selects which named stat group is returned by\nthe `Webkul\\Admin\\Helpers\\Dashboard` helper:\n\n  over-all (default), today, stock-threshold-products, total-sales,\n  total-visitors, top-selling-products, top-customers\n\n`start` / `end` (ISO dates) and `channel` (channel code) narrow the\nwindow; the helper falls back to \"last 30 days\" when omitted."
+            "description": "Admin dashboard statistics (read-only).\n\nREST   : GET /api/admin/dashboard/stats\nGraphQL: adminDashboardStats query\n\nMirrors `Webkul\\Admin\\Http\\Controllers\\DashboardController::stats()`.\nThe `type` query param selects which named stat group is returned by\nthe `Webkul\\Admin\\Helpers\\Dashboard` helper:\n\n  over-all (default), today, stock-threshold-products, total-sales,\n  top-selling-products, top-customers\n\n`start` / `end` (ISO dates) and `channel` (channel code) narrow the\nwindow; the helper falls back to \"last 30 days\" when omitted."
         },
         {
             "name": "Admin Sales: EU Withdrawal",
@@ -41102,7 +41097,7 @@
         },
         {
             "name": "Admin Reporting: Customers",
-            "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-traffic, customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups."
+            "description": "Admin reporting — customers (read-only).\n\nREST   : GET /api/admin/reporting/customers\nGraphQL: adminReportingCustomers query\n\nMirrors `Reporting/CustomerController::stats()`. `?type=`:\n  total-customers (default), customers-with-most-sales,\n  customers-with-most-orders, customers-with-most-reviews,\n  top-customer-groups."
         },
         {
             "name": "Admin Reporting: Overview",
@@ -41110,7 +41105,7 @@
         },
         {
             "name": "Admin Reporting: Products",
-            "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, products-with-most-visits,\n  last-search-terms, top-search-terms."
+            "description": "Admin reporting — products (read-only).\n\nREST   : GET /api/admin/reporting/products\nGraphQL: adminReportingProducts query\n\nMirrors `Reporting/ProductController::stats()`. `?type=`:\n  total-sold-quantities (default), total-products-added-to-wishlist,\n  top-selling-products-by-revenue, top-selling-products-by-quantity,\n  products-with-most-reviews, last-search-terms, top-search-terms."
         },
         {
             "name": "Admin Reporting: Sales",
@@ -41158,7 +41153,7 @@
         },
         {
             "name": "Admin Settings: Themes",
-            "description": "Mass-update status admin settings theme customizations.\n\nREST:    POST /api/admin/settings/themes/mass-update-status\nGraphQL: createAdminSettingsThemeMassUpdateStatus\n\nMirrors Bagisto admin ThemeController::massUpdate which calls\nThemeCustomizationRepository::massUpdateStatus."
+            "description": "Mass-update status admin settings theme sections.\n\nREST:    POST /api/admin/settings/themes/mass-update-status\nGraphQL: createAdminSettingsThemeMassUpdateStatus\n\nDelegates to SectionRepository::massUpdateStatus. A bulk convenience this API\nadds on top of Appearance\\SectionController::status, which toggles one section."
         },
         {
             "name": "Admin Settings: Users",

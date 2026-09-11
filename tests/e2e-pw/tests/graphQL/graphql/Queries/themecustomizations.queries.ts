@@ -41,7 +41,7 @@ query themeCustomizations($type: String) {
         translation {
           id
           _id
-          themeCustomizationId
+          sectionId
           locale
           options
         }
@@ -50,7 +50,7 @@ query themeCustomizations($type: String) {
             node {
               id
               _id
-              themeCustomizationId
+              sectionId
               locale
               options
             }
@@ -96,7 +96,7 @@ query themeCustomizations($first: Int, $after: String, $last: Int, $before: Stri
         translation {
           id
           _id
-          themeCustomizationId
+          sectionId
           locale
           options
         }
@@ -106,7 +106,7 @@ query themeCustomizations($first: Int, $after: String, $last: Int, $before: Stri
             node {
               id
               _id
-              themeCustomizationId
+              sectionId
               locale
               options
             }
@@ -184,7 +184,7 @@ query getThemeCustomisation($id: ID!) {
     translation {
       id
       _id
-      themeCustomizationId
+      sectionId
       locale
       options
     }
@@ -194,7 +194,7 @@ query getThemeCustomisation($id: ID!) {
         node {
           id
           _id
-          themeCustomizationId
+          sectionId
           locale
           options
         }

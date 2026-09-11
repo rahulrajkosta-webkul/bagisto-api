@@ -47,20 +47,20 @@ use Webkul\BagistoApi\Traits\ServesLoadedTranslation;
                                     'updatedAt' => '2026-04-07T18:05:39+05:30',
                                     'translation' => [
                                         'id' => 3,
-                                        'themeCustomizationId' => 3,
+                                        'sectionId' => 3,
                                         'locale' => 'en',
                                         'options' => '{"filters": {"sort": "asc", "limit": "10", "parent_id": "1"}}',
                                     ],
                                     'translations' => [
                                         [
                                             'id' => 3,
-                                            'themeCustomizationId' => 3,
+                                            'sectionId' => 3,
                                             'locale' => 'en',
                                             'options' => '{"filters": {"sort": "asc", "limit": "10", "parent_id": "1"}}',
                                         ],
                                         [
                                             'id' => 29,
-                                            'themeCustomizationId' => 3,
+                                            'sectionId' => 3,
                                             'locale' => 'AR',
                                             'options' => '{"filters": {"sort": "asc", "limit": "10", "parent_id": "1"}}',
                                         ],
@@ -104,14 +104,14 @@ use Webkul\BagistoApi\Traits\ServesLoadedTranslation;
                                         'updatedAt' => '2026-04-07T18:05:39+05:30',
                                         'translation' => [
                                             'id' => 3,
-                                            'themeCustomizationId' => 3,
+                                            'sectionId' => 3,
                                             'locale' => 'en',
                                             'options' => '{"filters": {"sort": "asc", "limit": "10", "parent_id": "1"}}',
                                         ],
                                         'translations' => [
                                             [
                                                 'id' => 3,
-                                                'themeCustomizationId' => 3,
+                                                'sectionId' => 3,
                                                 'locale' => 'en',
                                                 'options' => '{"filters": {"sort": "asc", "limit": "10", "parent_id": "1"}}',
                                             ],
@@ -138,7 +138,7 @@ use Webkul\BagistoApi\Traits\ServesLoadedTranslation;
         ),
     ],
 )]
-class ThemeCustomization extends \Webkul\Theme\Models\ThemeCustomization
+class Section extends \Webkul\Theme\Models\Section
 {
     use ServesLoadedTranslation;
 
@@ -148,7 +148,19 @@ class ThemeCustomization extends \Webkul\Theme\Models\ThemeCustomization
     protected $with = ['translations'];
 
     /**
-     * Get unique theme customization identifier for API
+     * Unpublished edits never leave the storefront API. v2.4 stages content, on/off state
+     * and ordering as drafts beside the live columns, and only a published section is what
+     * the storefront renders.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'draft_status',
+        'draft_sort_order',
+    ];
+
+    /**
+     * Get unique section identifier for API
      */
     #[ApiProperty(identifier: true, writable: false)]
     public function getId(): int

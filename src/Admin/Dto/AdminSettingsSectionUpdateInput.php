@@ -9,14 +9,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Input DTO for PUT /api/admin/settings/themes/{id} and the GraphQL
  * update/delete mutations (delete reuses this input — only `id` is required).
  *
- * Mirrors Bagisto admin ThemeController::update payload:
+ * Mirrors Bagisto admin Appearance\SectionController::update payload:
  *   - locale: locale code under which `options` (translatable) are scoped
  *   - <locale>: { options: { ...arbitrary JSON shape based on type } }
  *
  * Image-bearing types (image_carousel, services_content) accept already-uploaded
  * path strings only in v1; static_content accepts the inline html/css text.
  */
-class AdminSettingsThemeUpdateInput
+class AdminSettingsSectionUpdateInput
 {
     #[ApiProperty(description: 'Resource IRI (e.g. /api/admin/settings/themes/4).')]
     #[Groups(['mutation'])]

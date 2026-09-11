@@ -1,4 +1,4 @@
-// Admin Settings — Themes (theme_customizations) REST e2e.
+// Admin Settings — Themes (theme_sections) REST e2e.
 // Listing / detail / create / update / delete / mass-delete / mass-update-status.
 // Delete wipes the storage directory — only act on fresh rows we created.
 

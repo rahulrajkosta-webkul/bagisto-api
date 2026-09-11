@@ -4,22 +4,22 @@ namespace Webkul\BagistoApi\Admin\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeRestDto;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionRestDto;
 use Webkul\BagistoApi\Admin\Helper\AdminAuthHelper;
-use Webkul\BagistoApi\Admin\Models\AdminSettingsTheme;
+use Webkul\BagistoApi\Admin\Models\AdminSettingsSection;
 use Webkul\BagistoApi\Exception\AuthenticationException;
 use Webkul\BagistoApi\Exception\ResourceNotFoundException;
-use Webkul\Theme\Models\ThemeCustomization;
+use Webkul\Theme\Models\Section;
 
 /**
  * Theme detail — GET /api/admin/settings/themes/{id} + adminSettingsTheme query.
  *
- * Branches: GraphQL → the AdminSettingsTheme Eloquent model (translations
- * resolves as a connection); REST → the flat AdminSettingsThemeRestDto.
+ * Branches: GraphQL → the AdminSettingsSection Eloquent model (translations
+ * resolves as a connection); REST → the flat AdminSettingsSectionRestDto.
  */
-class AdminSettingsThemeItemProvider implements ProviderInterface
+class AdminSettingsSectionItemProvider implements ProviderInterface
 {
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): AdminSettingsTheme|AdminSettingsThemeRestDto
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): AdminSettingsSection|AdminSettingsSectionRestDto
     {
         if (! AdminAuthHelper::resolveAdmin()) {
             throw new AuthenticationException(__('bagistoapi::app.admin.profile.unauthenticated'));
@@ -32,7 +32,7 @@ class AdminSettingsThemeItemProvider implements ProviderInterface
         }
 
         if (! empty($context['graphql_operation_name'])) {
-            $model = AdminSettingsTheme::with('translations')->find($id);
+            $model = AdminSettingsSection::with('translations')->find($id);
 
             if (! $model) {
                 throw new ResourceNotFoundException(__('bagistoapi::app.admin.settings.theme.not-found'));
@@ -41,7 +41,7 @@ class AdminSettingsThemeItemProvider implements ProviderInterface
             return $model;
         }
 
-        $theme = ThemeCustomization::with('translations')->find($id);
+        $theme = Section::with('translations')->find($id);
 
         if (! $theme) {
             throw new ResourceNotFoundException(__('bagistoapi::app.admin.settings.theme.not-found'));
@@ -53,15 +53,15 @@ class AdminSettingsThemeItemProvider implements ProviderInterface
     /**
      * Public alias used by the processor to reuse the REST mapping logic.
      */
-    public function buildRestDtoPublic(object $theme): AdminSettingsThemeRestDto
+    public function buildRestDtoPublic(object $theme): AdminSettingsSectionRestDto
     {
         return $this->buildRestDto($theme);
     }
 
-    protected function buildRestDto(object $theme): AdminSettingsThemeRestDto
+    protected function buildRestDto(object $theme): AdminSettingsSectionRestDto
     {
-        /** @var ThemeCustomization $theme */
-        $dto = new AdminSettingsThemeRestDto;
+        /** @var Section $theme */
+        $dto = new AdminSettingsSectionRestDto;
 
         $dto->id = (int) $theme->id;
         $dto->name = $theme->name;

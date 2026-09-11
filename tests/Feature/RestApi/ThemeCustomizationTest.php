@@ -3,7 +3,7 @@
 namespace Webkul\BagistoApi\Tests\Feature\RestApi;
 
 use Webkul\BagistoApi\Tests\RestApiTestCase;
-use Webkul\Theme\Models\ThemeCustomization;
+use Webkul\Theme\Models\Section;
 
 class ThemeCustomizationTest extends RestApiTestCase
 {
@@ -16,7 +16,7 @@ class ThemeCustomizationTest extends RestApiTestCase
 
     private function firstId(): int
     {
-        $id = ThemeCustomization::query()->orderBy('id')->value('id');
+        $id = Section::query()->orderBy('id')->value('id');
 
         if (! $id) {
             $this->markTestSkipped('No theme customizations found. Run Bagisto seeders.');
@@ -27,7 +27,7 @@ class ThemeCustomizationTest extends RestApiTestCase
 
     private function firstType(): string
     {
-        $type = ThemeCustomization::query()->orderBy('id')->value('type');
+        $type = Section::query()->orderBy('id')->value('type');
 
         if (! $type) {
             $this->markTestSkipped('No theme customizations found. Run Bagisto seeders.');
@@ -102,7 +102,7 @@ class ThemeCustomizationTest extends RestApiTestCase
     {
         $this->seedRequiredData();
 
-        if (! ThemeCustomization::where('type', 'footer_links')->exists()) {
+        if (! Section::where('type', 'footer_links')->exists()) {
             $this->markTestSkipped('No footer_links theme customizations in DB.');
         }
 
@@ -131,7 +131,7 @@ class ThemeCustomizationTest extends RestApiTestCase
     {
         $this->seedRequiredData();
 
-        $types = ThemeCustomization::select('type')->distinct()->pluck('type')->toArray();
+        $types = Section::select('type')->distinct()->pluck('type')->toArray();
 
         if (count($types) < 2) {
             $this->markTestSkipped('Need at least 2 distinct types to test filter isolation.');
@@ -152,7 +152,7 @@ class ThemeCustomizationTest extends RestApiTestCase
     {
         $this->seedRequiredData();
 
-        if (ThemeCustomization::count() < 2) {
+        if (Section::count() < 2) {
             $this->markTestSkipped('Need at least 2 theme customizations to test per_page.');
         }
 
@@ -166,7 +166,7 @@ class ThemeCustomizationTest extends RestApiTestCase
     {
         $this->seedRequiredData();
 
-        if (ThemeCustomization::count() < 2) {
+        if (Section::count() < 2) {
             $this->markTestSkipped('Need at least 2 theme customizations to test page parameter.');
         }
 

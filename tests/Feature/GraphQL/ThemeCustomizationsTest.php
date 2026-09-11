@@ -2,7 +2,7 @@
 
 namespace Webkul\BagistoApi\Tests\Feature\GraphQL;
 
-use Webkul\BagistoApi\Models\ThemeCustomization;
+use Webkul\BagistoApi\Models\Section;
 use Webkul\BagistoApi\Tests\GraphQLTestCase;
 
 /**
@@ -18,7 +18,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
 {
     private function existingThemeCustomizationId(): int
     {
-        $id = ThemeCustomization::query()
+        $id = Section::query()
             ->whereHas('translations')
             ->orderBy('id')
             ->value('id');
@@ -116,7 +116,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
                     translation {
                       id
                       _id
-                      themeCustomizationId
+                      sectionId
                       locale
                       options
                     }
@@ -125,7 +125,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
                         node {
                           id
                           _id
-                          themeCustomizationId
+                          sectionId
                           locale
                           options
                         }
@@ -174,7 +174,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
         expect($themeNode['translation'])->toHaveKeys([
             'id',
             '_id',
-            'themeCustomizationId',
+            'sectionId',
             'locale',
             'options',
         ]);
@@ -183,7 +183,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
         expect($translationNode)->toHaveKeys([
             'id',
             '_id',
-            'themeCustomizationId',
+            'sectionId',
             'locale',
             'options',
         ]);
@@ -232,7 +232,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
                     translation {
                       id
                       _id
-                      themeCustomizationId
+                      sectionId
                       locale
                       options
                     }
@@ -242,7 +242,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
                         node {
                           id
                           _id
-                          themeCustomizationId
+                          sectionId
                           locale
                           options
                         }
@@ -293,7 +293,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
         expect($themeNode['translation'])->toHaveKeys([
             'id',
             '_id',
-            'themeCustomizationId',
+            'sectionId',
             'locale',
             'options',
         ]);
@@ -302,7 +302,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
         expect($translationsNode)->toHaveKeys([
             'id',
             '_id',
-            'themeCustomizationId',
+            'sectionId',
             'locale',
             'options',
         ]);
@@ -443,7 +443,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
                 translation {
                   id
                   _id
-                  themeCustomizationId
+                  sectionId
                   locale
                   options
                 }
@@ -453,7 +453,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
                     node {
                       id
                       _id
-                      themeCustomizationId
+                      sectionId
                       locale
                       options
                     }
@@ -494,7 +494,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
         expect($theme['translation'])->toHaveKeys([
             'id',
             '_id',
-            'themeCustomizationId',
+            'sectionId',
             'locale',
             'options',
         ]);
@@ -503,7 +503,7 @@ class ThemeCustomizationsTest extends GraphQLTestCase
         expect($translationNode)->toHaveKeys([
             'id',
             '_id',
-            'themeCustomizationId',
+            'sectionId',
             'locale',
             'options',
         ]);

@@ -4,24 +4,27 @@ namespace Webkul\BagistoApi\Admin\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeMassUpdateStatusInput;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionMassDeleteInput;
 use Webkul\BagistoApi\Admin\Helper\AdminAuthHelper;
-use Webkul\BagistoApi\Admin\Models\AdminSettingsThemeMassUpdateStatus;
+use Webkul\BagistoApi\Admin\Models\AdminSettingsSectionMassDelete;
+use Webkul\BagistoApi\Admin\State\Concerns\ResolvesSectionMedia;
 use Webkul\BagistoApi\Exception\AuthenticationException;
 use Webkul\BagistoApi\Exception\AuthorizationException;
 use Webkul\BagistoApi\Exception\InvalidInputException;
-use Webkul\Theme\Repositories\ThemeCustomizationRepository;
+use Webkul\Theme\Models\Section;
 
 /**
- * POST /api/admin/settings/themes/mass-update-status +
- * createAdminSettingsThemeMassUpdateStatus.
+ * POST /api/admin/settings/themes/mass-delete +
+ * createAdminSettingsThemeMassDelete.
  *
- * Delegates to ThemeCustomizationRepository::massUpdateStatus — same path as
- * the admin ThemeController::massUpdate.
+ * Bulk form of Appearance\SectionController::destroy — best-effort loop; missing
+ * IDs silently skipped. Storage directory wiped per section.
  */
-class AdminSettingsThemeMassUpdateStatusProcessor implements ProcessorInterface
+class AdminSettingsSectionMassDeleteProcessor implements ProcessorInterface
 {
-    public function __construct(protected ThemeCustomizationRepository $repository) {}
+    use ResolvesSectionMedia;
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
@@ -30,27 +33,49 @@ class AdminSettingsThemeMassUpdateStatusProcessor implements ProcessorInterface
             throw new AuthenticationException(__('bagistoapi::app.admin.profile.unauthenticated'));
         }
 
-        $this->assertPermission($admin, 'settings.themes.edit');
+        $this->assertPermission($admin, 'appearance.sections.delete');
 
         $indices = $this->resolveIndices($data, $context);
-        $value = $this->resolveValue($data, $context);
 
         if (empty($indices)) {
-            throw new InvalidInputException(__('bagistoapi::app.admin.settings.theme.mass-update-indices-required'), 422);
+            throw new InvalidInputException(__('bagistoapi::app.admin.settings.theme.mass-delete-indices-required'), 422);
         }
 
-        if (! in_array($value, [0, 1], true)) {
-            throw new InvalidInputException(__('bagistoapi::app.admin.settings.theme.mass-update-value-invalid'), 422);
+        $deleted = [];
+
+        foreach ($indices as $index) {
+            $id = (int) $index;
+            $row = Section::find($id);
+            if (! $row) {
+                continue;
+            }
+
+            try {
+                Event::dispatch('section.delete.before', $id);
+
+                $mediaDirectory = $this->mediaDirectory($row);
+
+                $row->delete();
+
+                try {
+                    Storage::deleteDirectory($mediaDirectory);
+                } catch (\Throwable $e) {
+                    report($e);
+                }
+
+                Event::dispatch('section.delete.after', $id);
+
+                $deleted[] = $id;
+            } catch (\Throwable $e) {
+                report($e);
+                throw new InvalidInputException(__('bagistoapi::app.admin.settings.theme.delete-failed'), 500);
+            }
         }
 
-        $ids = array_map('intval', $indices);
-
-        $this->repository->massUpdateStatus(['status' => $value], $ids);
-
-        $result = new AdminSettingsThemeMassUpdateStatus;
+        $result = new AdminSettingsSectionMassDelete;
         $result->id = 1;
-        $result->updated = $ids;
-        $result->message = __('bagistoapi::app.admin.settings.theme.mass-update-success');
+        $result->deleted = $deleted;
+        $result->message = __('bagistoapi::app.admin.settings.theme.mass-delete-success');
 
         return $result;
     }
@@ -81,7 +106,7 @@ class AdminSettingsThemeMassUpdateStatusProcessor implements ProcessorInterface
 
     protected function resolveIndices(mixed $data, array $context): array
     {
-        if ($data instanceof AdminSettingsThemeMassUpdateStatusInput && ! empty($data->indices)) {
+        if ($data instanceof AdminSettingsSectionMassDeleteInput && ! empty($data->indices)) {
             return $data->indices;
         }
 
@@ -96,24 +121,5 @@ class AdminSettingsThemeMassUpdateStatusProcessor implements ProcessorInterface
         }
 
         return [];
-    }
-
-    protected function resolveValue(mixed $data, array $context): ?int
-    {
-        if ($data instanceof AdminSettingsThemeMassUpdateStatusInput && $data->value !== null) {
-            return (int) $data->value;
-        }
-
-        $fromArgs = $context['args']['input']['value'] ?? $context['args']['value'] ?? null;
-        if ($fromArgs !== null && $fromArgs !== '') {
-            return (int) $fromArgs;
-        }
-
-        $fromBody = request()->input('value');
-        if ($fromBody !== null && $fromBody !== '') {
-            return (int) $fromBody;
-        }
-
-        return null;
     }
 }

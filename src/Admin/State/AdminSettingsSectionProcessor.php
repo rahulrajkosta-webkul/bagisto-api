@@ -12,22 +12,23 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeCreateInput;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeRestDto;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeUpdateInput;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionCreateInput;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionRestDto;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionUpdateInput;
 use Webkul\BagistoApi\Admin\Helper\AdminAuthHelper;
-use Webkul\BagistoApi\Admin\Models\AdminSettingsTheme;
+use Webkul\BagistoApi\Admin\Models\AdminSettingsSection;
+use Webkul\BagistoApi\Admin\State\Concerns\ResolvesSectionMedia;
 use Webkul\BagistoApi\Exception\AuthenticationException;
 use Webkul\BagistoApi\Exception\AuthorizationException;
 use Webkul\BagistoApi\Exception\InvalidInputException;
 use Webkul\BagistoApi\Exception\ResourceNotFoundException;
-use Webkul\Theme\Models\ThemeCustomization;
-use Webkul\Theme\Repositories\ThemeCustomizationRepository;
+use Webkul\Theme\Models\Section;
+use Webkul\Theme\Repositories\SectionRepository;
 
 /**
- * Handles POST / PUT / DELETE for AdminSettingsTheme.
+ * Handles POST / PUT / DELETE for AdminSettingsSection.
  *
- * Mirrors Webkul\Admin\Http\Controllers\Settings\ThemeController.
+ * Mirrors Webkul\Admin\Http\Controllers\Appearance\SectionController.
  *
  * Notes:
  *  - Image uploads inside `options` (image_carousel/services_content slides,
@@ -37,11 +38,13 @@ use Webkul\Theme\Repositories\ThemeCustomizationRepository;
  *    is out of scope for v1. Use the admin panel UI for image uploads.
  *  - Permission resolution mirrors AdminSettingsLocaleProcessor — reads role
  *    permission_type/permissions directly, never calls bouncer().
- *  - Delete also wipes the theme's storage directory (theme/{id}) to match
- *    monolith parity.
+ *  - Delete also wipes the section's storage directory
+ *    (themes/{theme_code}/sections/{id}) to match monolith parity.
  */
-class AdminSettingsThemeProcessor implements ProcessorInterface
+class AdminSettingsSectionProcessor implements ProcessorInterface
 {
+    use ResolvesSectionMedia;
+
     public const ALLOWED_TYPES = [
         'product_carousel',
         'category_carousel',
@@ -52,8 +55,8 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
     ];
 
     public function __construct(
-        protected AdminSettingsThemeItemProvider $itemProvider,
-        protected ThemeCustomizationRepository $themeRepository,
+        protected AdminSettingsSectionItemProvider $itemProvider,
+        protected SectionRepository $themeRepository,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
@@ -65,30 +68,30 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
 
         $isGraphQL = $operation instanceof Mutation;
 
-        if ($isGraphQL && $operation->getName() === 'delete' && $data instanceof AdminSettingsThemeUpdateInput) {
-            $this->assertPermission($admin, 'settings.themes.delete');
+        if ($isGraphQL && $operation->getName() === 'delete' && $data instanceof AdminSettingsSectionUpdateInput) {
+            $this->assertPermission($admin, 'appearance.sections.delete');
             $id = (int) basename((string) $this->resolveUpdateId($data, $context));
 
             return $this->handleDelete($id, true);
         }
 
-        if ($data instanceof AdminSettingsThemeCreateInput
-            || ($data instanceof AdminSettingsTheme && $operation instanceof Post)) {
-            $this->assertPermission($admin, 'settings.themes.create');
+        if ($data instanceof AdminSettingsSectionCreateInput
+            || ($data instanceof AdminSettingsSection && $operation instanceof Post)) {
+            $this->assertPermission($admin, 'appearance.sections.create');
 
             return $this->handleCreate($this->resolveCreateInput($data, $context, $isGraphQL), $isGraphQL);
         }
 
-        if ($data instanceof AdminSettingsThemeUpdateInput
-            || ($data instanceof AdminSettingsTheme && $operation instanceof Put)) {
-            $this->assertPermission($admin, 'settings.themes.edit');
+        if ($data instanceof AdminSettingsSectionUpdateInput
+            || ($data instanceof AdminSettingsSection && $operation instanceof Put)) {
+            $this->assertPermission($admin, 'appearance.sections.edit');
             $id = (int) ($uriVariables['id'] ?? basename((string) $this->resolveUpdateId($data, $context)));
 
             return $this->handleUpdate($id, $this->resolveUpdateInput($data, $context, $isGraphQL), $isGraphQL);
         }
 
         if ($operation instanceof Delete) {
-            $this->assertPermission($admin, 'settings.themes.delete');
+            $this->assertPermission($admin, 'appearance.sections.delete');
             $id = (int) ($uriVariables['id'] ?? 0);
 
             return $this->handleDelete($id);
@@ -97,15 +100,15 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
         return null;
     }
 
-    protected function handleCreate(array $input, bool $isGraphQL = false): AdminSettingsTheme|AdminSettingsThemeRestDto
+    protected function handleCreate(array $input, bool $isGraphQL = false): AdminSettingsSection|AdminSettingsSectionRestDto
     {
         $payload = $this->normaliseCreatePayload($input);
 
         $this->validateCreatePayload($payload);
 
-        Event::dispatch('theme_customization.create.before');
+        Event::dispatch('section.create.before');
 
-        $theme = ThemeCustomization::create([
+        $theme = Section::create([
             'name' => $payload['name'],
             'sort_order' => $payload['sort_order'],
             'type' => $payload['type'],
@@ -114,14 +117,14 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
             'status' => $payload['status'] ?? 0,
         ]);
 
-        Event::dispatch('theme_customization.create.after', $theme);
+        Event::dispatch('section.create.after', $theme);
 
         return $this->buildResult((int) $theme->id, $isGraphQL);
     }
 
-    protected function handleUpdate(int $id, array $input, bool $isGraphQL = false): AdminSettingsTheme|AdminSettingsThemeRestDto
+    protected function handleUpdate(int $id, array $input, bool $isGraphQL = false): AdminSettingsSection|AdminSettingsSectionRestDto
     {
-        $existing = ThemeCustomization::find($id);
+        $existing = Section::find($id);
         if (! $existing) {
             throw new ResourceNotFoundException(__('bagistoapi::app.admin.settings.theme.not-found'));
         }
@@ -130,7 +133,7 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
 
         $this->validateUpdatePayload($payload);
 
-        Event::dispatch('theme_customization.update.before', $id);
+        Event::dispatch('section.update.before', $id);
 
         $locale = $payload['locale'];
 
@@ -182,34 +185,36 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
         if (isset($repoPayload[$locale]['options'])) {
             $translation = $existing->translateOrNew($locale);
             $translation->options = $repoPayload[$locale]['options'];
-            $translation->theme_customization_id = $existing->id;
+            $translation->section_id = $existing->id;
             $translation->save();
         }
 
-        Event::dispatch('theme_customization.update.after', $existing->fresh());
+        Event::dispatch('section.update.after', $existing->fresh());
 
         return $this->buildResult($id, $isGraphQL);
     }
 
-    protected function handleDelete(int $id, bool $asResource = false): array|AdminSettingsTheme
+    protected function handleDelete(int $id, bool $asResource = false): array|AdminSettingsSection
     {
-        $existing = ThemeCustomization::find($id);
+        $existing = Section::find($id);
         if (! $existing) {
             throw new ResourceNotFoundException(__('bagistoapi::app.admin.settings.theme.not-found'));
         }
 
         try {
-            Event::dispatch('theme_customization.delete.before', $id);
+            Event::dispatch('section.delete.before', $id);
+
+            $mediaDirectory = $this->mediaDirectory($existing);
 
             $existing->delete();
 
             try {
-                Storage::deleteDirectory('theme/'.$id);
+                Storage::deleteDirectory($mediaDirectory);
             } catch (\Throwable $e) {
                 report($e);
             }
 
-            Event::dispatch('theme_customization.delete.after', $id);
+            Event::dispatch('section.delete.after', $id);
         } catch (\Throwable $e) {
             report($e);
             throw new InvalidInputException(
@@ -219,7 +224,7 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
         }
 
         if ($asResource) {
-            $snapshot = (new AdminSettingsTheme)->forceFill([
+            $snapshot = (new AdminSettingsSection)->forceFill([
                 'id' => $id,
                 'name' => $existing->name,
                 'type' => $existing->type,
@@ -243,13 +248,13 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
      * Result of a create/update: the Eloquent model for GraphQL (translations
      * connection resolves), the flat RestDto for REST.
      */
-    protected function buildResult(int $id, bool $isGraphQL): AdminSettingsTheme|AdminSettingsThemeRestDto
+    protected function buildResult(int $id, bool $isGraphQL): AdminSettingsSection|AdminSettingsSectionRestDto
     {
         if ($isGraphQL) {
-            return AdminSettingsTheme::with('translations')->find($id);
+            return AdminSettingsSection::with('translations')->find($id);
         }
 
-        return $this->itemProvider->buildRestDtoPublic(ThemeCustomization::with('translations')->find($id));
+        return $this->itemProvider->buildRestDtoPublic(Section::with('translations')->find($id));
     }
 
     protected function validateCreatePayload(array $input): void
@@ -314,7 +319,7 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
 
     protected function resolveCreateInput(mixed $data, array $context, bool $isGraphQL = false): array
     {
-        if ($isGraphQL && $data instanceof AdminSettingsThemeCreateInput) {
+        if ($isGraphQL && $data instanceof AdminSettingsSectionCreateInput) {
             $rawArgs = $context['args']['input'] ?? $context['args'] ?? [];
             unset($rawArgs['id'], $rawArgs['clientMutationId']);
 
@@ -326,7 +331,7 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
 
     protected function resolveUpdateId(mixed $data, array $context): ?string
     {
-        if ($data instanceof AdminSettingsThemeUpdateInput && $data->id) {
+        if ($data instanceof AdminSettingsSectionUpdateInput && $data->id) {
             return $data->id;
         }
 
@@ -335,7 +340,7 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
 
     protected function resolveUpdateInput(mixed $data, array $context, bool $isGraphQL = false): array
     {
-        if ($isGraphQL && $data instanceof AdminSettingsThemeUpdateInput) {
+        if ($isGraphQL && $data instanceof AdminSettingsSectionUpdateInput) {
             $rawArgs = $context['args']['input'] ?? $context['args'] ?? [];
             unset($rawArgs['id'], $rawArgs['clientMutationId']);
 
@@ -387,7 +392,7 @@ class AdminSettingsThemeProcessor implements ProcessorInterface
         ];
     }
 
-    protected function normaliseUpdatePayload(array $input, ThemeCustomization $existing): array
+    protected function normaliseUpdatePayload(array $input, Section $existing): array
     {
         $locale = ! empty($input['locale']) ? (string) $input['locale'] : (core()?->getRequestedLocaleCode() ?? 'en');
 

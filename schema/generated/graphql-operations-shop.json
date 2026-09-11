@@ -738,12 +738,12 @@
     "themeCustomization": {
         "kind": "query",
         "tag": "ThemeCustomization",
-        "resource": "Webkul\\BagistoApi\\Models\\ThemeCustomization"
+        "resource": "Webkul\\BagistoApi\\Models\\Section"
     },
     "themeCustomizations": {
         "kind": "query",
         "tag": "ThemeCustomization",
-        "resource": "Webkul\\BagistoApi\\Models\\ThemeCustomization"
+        "resource": "Webkul\\BagistoApi\\Models\\Section"
     },
     "toggleWishlist": {
         "kind": "mutation",

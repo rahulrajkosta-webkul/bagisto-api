@@ -7,17 +7,18 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GraphQl\Mutation;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeMassDeleteInput;
-use Webkul\BagistoApi\Admin\State\AdminSettingsThemeMassDeleteProcessor;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionMassDeleteInput;
+use Webkul\BagistoApi\Admin\State\AdminSettingsSectionMassDeleteProcessor;
 
 /**
- * Mass-delete admin settings theme customizations.
+ * Mass-delete admin settings theme sections.
  *
  * REST:    POST /api/admin/settings/themes/mass-delete
  * GraphQL: createAdminSettingsThemeMassDelete
  *
- * Mirrors Bagisto admin ThemeController::massDestroy. Non-existent IDs are
- * silently skipped (matches monolith — best-effort loop).
+ * A bulk convenience this API adds on top of Appearance\SectionController::destroy;
+ * v2.4 dropped the admin panel's own mass-delete screen. Non-existent IDs are
+ * silently skipped (best-effort loop).
  */
 #[ApiResource(
     routePrefix: '/api/admin',
@@ -26,8 +27,8 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeMassDeleteProcessor;
     operations: [
         new Post(
             uriTemplate: '/settings/themes/mass-delete',
-            input: AdminSettingsThemeMassDeleteInput::class,
-            processor: AdminSettingsThemeMassDeleteProcessor::class,
+            input: AdminSettingsSectionMassDeleteInput::class,
+            processor: AdminSettingsSectionMassDeleteProcessor::class,
             status: 200,
             openapi: new Model\Operation(
                 tags: ['Admin Settings: Themes'],
@@ -56,13 +57,13 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeMassDeleteProcessor;
     graphQlOperations: [
         new Mutation(
             name: 'create',
-            input: AdminSettingsThemeMassDeleteInput::class,
-            processor: AdminSettingsThemeMassDeleteProcessor::class,
+            input: AdminSettingsSectionMassDeleteInput::class,
+            processor: AdminSettingsSectionMassDeleteProcessor::class,
             description: 'Mass-delete theme customizations. Becomes createAdminSettingsThemeMassDelete.',
         ),
     ],
 )]
-class AdminSettingsThemeMassDelete
+class AdminSettingsSectionMassDelete
 {
     #[ApiProperty(identifier: true, writable: false)]
     public ?int $id = null;

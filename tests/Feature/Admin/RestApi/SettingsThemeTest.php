@@ -29,7 +29,7 @@ class SettingsThemeTest extends AdminApiTestCase
 
     protected function insertTheme(array $overrides = []): int
     {
-        return (int) \DB::table('theme_customizations')->insertGetId(array_merge([
+        return (int) \DB::table('theme_sections')->insertGetId(array_merge([
             'name' => 'Test Theme '.rand(1000, 9999),
             'type' => 'static_content',
             'sort_order' => 1,
@@ -43,8 +43,8 @@ class SettingsThemeTest extends AdminApiTestCase
 
     protected function insertThemeTranslation(int $themeId, string $locale, array $options): int
     {
-        return (int) \DB::table('theme_customization_translations')->insertGetId([
-            'theme_customization_id' => $themeId,
+        return (int) \DB::table('theme_section_translations')->insertGetId([
+            'section_id' => $themeId,
             'locale' => $locale,
             'options' => json_encode($options),
         ]);
@@ -233,7 +233,7 @@ class SettingsThemeTest extends AdminApiTestCase
         $response->assertStatus(201);
         expect($response->json('id'))->toBeInt();
         expect($response->json('name'))->toBe('CreatedTheme');
-        expect(\DB::table('theme_customizations')->where('id', $response->json('id'))->exists())->toBeTrue();
+        expect(\DB::table('theme_sections')->where('id', $response->json('id'))->exists())->toBeTrue();
     }
 
     public function test_create_missing_name_returns_422(): void
@@ -299,7 +299,7 @@ class SettingsThemeTest extends AdminApiTestCase
             'theme_code' => 'default',
         ]);
         $response->assertOk();
-        expect(\DB::table('theme_customizations')->where('id', $id)->value('name'))->toBe('NewName');
+        expect(\DB::table('theme_sections')->where('id', $id)->value('name'))->toBe('NewName');
     }
 
     public function test_update_writes_per_locale_options(): void
@@ -318,8 +318,8 @@ class SettingsThemeTest extends AdminApiTestCase
         ]);
         $response->assertOk();
 
-        $tr = \DB::table('theme_customization_translations')
-            ->where('theme_customization_id', $id)
+        $tr = \DB::table('theme_section_translations')
+            ->where('section_id', $id)
             ->where('locale', 'en')
             ->first();
         expect($tr)->not()->toBeNull();
@@ -342,8 +342,8 @@ class SettingsThemeTest extends AdminApiTestCase
             'options' => ['html' => '<p>Hi</p><script>alert(1)</script>', 'css' => '.a{}'],
         ])->assertOk();
 
-        $tr = \DB::table('theme_customization_translations')
-            ->where('theme_customization_id', $id)
+        $tr = \DB::table('theme_section_translations')
+            ->where('section_id', $id)
             ->where('locale', 'en')
             ->first();
         $opts = json_decode($tr->options, true);
@@ -378,7 +378,7 @@ class SettingsThemeTest extends AdminApiTestCase
 
         $response = $this->adminDelete($admin, '/api/admin/settings/themes/'.$id);
         $response->assertOk();
-        expect(\DB::table('theme_customizations')->where('id', $id)->exists())->toBeFalse();
+        expect(\DB::table('theme_sections')->where('id', $id)->exists())->toBeFalse();
     }
 
     public function test_delete_unknown_id_returns_404(): void
@@ -399,8 +399,8 @@ class SettingsThemeTest extends AdminApiTestCase
         ]);
         $response->assertOk();
         expect($response->json('deleted'))->toBeArray();
-        expect(\DB::table('theme_customizations')->where('id', $a)->exists())->toBeFalse();
-        expect(\DB::table('theme_customizations')->where('id', $b)->exists())->toBeFalse();
+        expect(\DB::table('theme_sections')->where('id', $a)->exists())->toBeFalse();
+        expect(\DB::table('theme_sections')->where('id', $b)->exists())->toBeFalse();
     }
 
     public function test_mass_delete_empty_indices_returns_422(): void
@@ -428,8 +428,8 @@ class SettingsThemeTest extends AdminApiTestCase
             'value' => 1,
         ]);
         $response->assertOk();
-        expect((int) \DB::table('theme_customizations')->where('id', $a)->value('status'))->toBe(1);
-        expect((int) \DB::table('theme_customizations')->where('id', $b)->value('status'))->toBe(1);
+        expect((int) \DB::table('theme_sections')->where('id', $a)->value('status'))->toBe(1);
+        expect((int) \DB::table('theme_sections')->where('id', $b)->value('status'))->toBe(1);
     }
 
     public function test_mass_update_status_invalid_value_returns_422(): void

@@ -77,7 +77,7 @@ export function assertTranslationsConnection(translations: any) {
 
     expect(typeof node.id).toBe('string');
     expect(typeof node._id).toBe('number');
-    expect(typeof node.themeCustomizationId).toBe('string');
+    expect(typeof node.sectionId).toBe('string');
     expect(typeof node.locale).toBe('string');
     expect(typeof node.options).toBe('string');
 

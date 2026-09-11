@@ -7,17 +7,17 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GraphQl\Mutation;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeMassUpdateStatusInput;
-use Webkul\BagistoApi\Admin\State\AdminSettingsThemeMassUpdateStatusProcessor;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionMassUpdateStatusInput;
+use Webkul\BagistoApi\Admin\State\AdminSettingsSectionMassUpdateStatusProcessor;
 
 /**
- * Mass-update status admin settings theme customizations.
+ * Mass-update status admin settings theme sections.
  *
  * REST:    POST /api/admin/settings/themes/mass-update-status
  * GraphQL: createAdminSettingsThemeMassUpdateStatus
  *
- * Mirrors Bagisto admin ThemeController::massUpdate which calls
- * ThemeCustomizationRepository::massUpdateStatus.
+ * Delegates to SectionRepository::massUpdateStatus. A bulk convenience this API
+ * adds on top of Appearance\SectionController::status, which toggles one section.
  */
 #[ApiResource(
     routePrefix: '/api/admin',
@@ -26,8 +26,8 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeMassUpdateStatusProcessor;
     operations: [
         new Post(
             uriTemplate: '/settings/themes/mass-update-status',
-            input: AdminSettingsThemeMassUpdateStatusInput::class,
-            processor: AdminSettingsThemeMassUpdateStatusProcessor::class,
+            input: AdminSettingsSectionMassUpdateStatusInput::class,
+            processor: AdminSettingsSectionMassUpdateStatusProcessor::class,
             status: 200,
             openapi: new Model\Operation(
                 tags: ['Admin Settings: Themes'],
@@ -57,13 +57,13 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeMassUpdateStatusProcessor;
     graphQlOperations: [
         new Mutation(
             name: 'create',
-            input: AdminSettingsThemeMassUpdateStatusInput::class,
-            processor: AdminSettingsThemeMassUpdateStatusProcessor::class,
+            input: AdminSettingsSectionMassUpdateStatusInput::class,
+            processor: AdminSettingsSectionMassUpdateStatusProcessor::class,
             description: 'Mass-update status of theme customizations. Becomes createAdminSettingsThemeMassUpdateStatus.',
         ),
     ],
 )]
-class AdminSettingsThemeMassUpdateStatus
+class AdminSettingsSectionMassUpdateStatus
 {
     #[ApiProperty(identifier: true, writable: false)]
     public ?int $id = null;

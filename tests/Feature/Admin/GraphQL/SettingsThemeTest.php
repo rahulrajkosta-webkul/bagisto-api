@@ -16,7 +16,7 @@ class SettingsThemeTest extends AdminApiTestCase
 
     protected function insertTheme(array $overrides = []): int
     {
-        return (int) \DB::table('theme_customizations')->insertGetId(array_merge([
+        return (int) \DB::table('theme_sections')->insertGetId(array_merge([
             'name' => 'GQL Theme '.rand(1000, 9999),
             'type' => 'static_content',
             'sort_order' => 1,
@@ -67,7 +67,7 @@ class SettingsThemeTest extends AdminApiTestCase
         if ($node !== null) {
             expect((int) $node['_id'])->toBe($id);
         } else {
-            expect(\DB::table('theme_customizations')->where('id', $id)->exists())->toBeTrue();
+            expect(\DB::table('theme_sections')->where('id', $id)->exists())->toBeTrue();
         }
     }
 
@@ -114,8 +114,8 @@ class SettingsThemeTest extends AdminApiTestCase
         $admin = $this->createAdmin();
         $id = $this->insertTheme(['name' => 'GQLConnTheme', 'type' => 'static_content']);
 
-        \DB::table('theme_customization_translations')->insert([
-            'theme_customization_id' => $id,
+        \DB::table('theme_section_translations')->insert([
+            'section_id' => $id,
             'locale' => 'en',
             'options' => json_encode(['html' => '<h1>Hi</h1>', 'css' => '.x{color:red}']),
         ]);
@@ -171,7 +171,7 @@ class SettingsThemeTest extends AdminApiTestCase
             ],
         ], $admin);
 
-        expect(\DB::table('theme_customizations')->where('name', 'GQLCreatedTheme')->exists())->toBeTrue();
+        expect(\DB::table('theme_sections')->where('name', 'GQLCreatedTheme')->exists())->toBeTrue();
     }
 
     public function test_mutation_delete_theme(): void
@@ -191,7 +191,7 @@ class SettingsThemeTest extends AdminApiTestCase
             'input' => ['id' => '/api/admin/settings/themes/'.$id],
         ], $admin);
 
-        expect(\DB::table('theme_customizations')->where('id', $id)->exists())->toBeFalse();
+        expect(\DB::table('theme_sections')->where('id', $id)->exists())->toBeFalse();
     }
 
     public function test_mutation_mass_delete(): void
@@ -212,7 +212,7 @@ class SettingsThemeTest extends AdminApiTestCase
             'input' => ['indices' => [$a, $b]],
         ], $admin);
 
-        expect(\DB::table('theme_customizations')->where('id', $a)->exists())->toBeFalse();
-        expect(\DB::table('theme_customizations')->where('id', $b)->exists())->toBeFalse();
+        expect(\DB::table('theme_sections')->where('id', $a)->exists())->toBeFalse();
+        expect(\DB::table('theme_sections')->where('id', $b)->exists())->toBeFalse();
     }
 }

@@ -3914,7 +3914,7 @@ type ThemeCustomization implements Node {
 type ThemeCustomizationTranslation implements Node {
   id: ID!
   _id: Int!
-  themeCustomizationId: String!
+  sectionId: String!
   locale: String!
   options: String!
 }

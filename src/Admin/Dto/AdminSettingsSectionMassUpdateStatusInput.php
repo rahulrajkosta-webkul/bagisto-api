@@ -8,7 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Input DTO for POST /api/admin/settings/themes/mass-update-status.
  */
-class AdminSettingsThemeMassUpdateStatusInput
+class AdminSettingsSectionMassUpdateStatusInput
 {
     /** @var int[]|null */
     #[ApiProperty(description: 'Array of theme customization IDs.')]

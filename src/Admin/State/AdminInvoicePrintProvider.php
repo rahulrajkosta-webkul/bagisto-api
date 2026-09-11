@@ -43,7 +43,7 @@ class AdminInvoicePrintProvider implements ProviderInterface
 
             return new Response($pdf->output(), 200, [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+                'Content-Disposition' => 'attachment; filename='.$filename,
             ]);
         } catch (\Throwable $e) {
             throw new InvalidInputException(__('bagistoapi::app.admin.order.actions.invoice.pdf-failed').' '.$e->getMessage(), 500, $e);

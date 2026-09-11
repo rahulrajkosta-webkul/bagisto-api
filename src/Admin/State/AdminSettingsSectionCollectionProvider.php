@@ -6,8 +6,8 @@ use ApiPlatform\Laravel\Eloquent\Paginator;
 use ApiPlatform\Metadata\Operation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeRestDto;
-use Webkul\BagistoApi\Admin\Models\AdminSettingsTheme;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionRestDto;
+use Webkul\BagistoApi\Admin\Models\AdminSettingsSection;
 use Webkul\BagistoApi\Admin\State\Concerns\AbstractAdminCollectionProvider;
 
 /**
@@ -16,11 +16,11 @@ use Webkul\BagistoApi\Admin\State\Concerns\AbstractAdminCollectionProvider;
  * Slim listing — translations are NOT inlined here (would be N+1 across rows).
  * Use the detail endpoint to get the per-locale options blob.
  *
- * Branches: GraphQL → an AdminSettingsTheme Eloquent row per result (the
+ * Branches: GraphQL → an AdminSettingsSection Eloquent row per result (the
  * `translations` connection is set empty on listings — detail-only, no N+1);
- * REST → the flat AdminSettingsThemeRestDto.
+ * REST → the flat AdminSettingsSectionRestDto.
  */
-class AdminSettingsThemeCollectionProvider extends AbstractAdminCollectionProvider
+class AdminSettingsSectionCollectionProvider extends AbstractAdminCollectionProvider
 {
     protected bool $listingIsGraphQL = false;
 
@@ -38,7 +38,7 @@ class AdminSettingsThemeCollectionProvider extends AbstractAdminCollectionProvid
 
     protected function buildQuery(array $args)
     {
-        return DB::table('theme_customizations')->select(
+        return DB::table('theme_sections')->select(
             'id',
             'name',
             'type',
@@ -90,7 +90,7 @@ class AdminSettingsThemeCollectionProvider extends AbstractAdminCollectionProvid
             return $this->mapRowToEloquent($row);
         }
 
-        $dto = new AdminSettingsThemeRestDto;
+        $dto = new AdminSettingsSectionRestDto;
 
         $dto->id = (int) $row->id;
         $dto->name = $row->name;
@@ -106,12 +106,12 @@ class AdminSettingsThemeCollectionProvider extends AbstractAdminCollectionProvid
     }
 
     /**
-     * GraphQL listing row → Eloquent AdminSettingsTheme. The `translations`
+     * GraphQL listing row → Eloquent AdminSettingsSection. The `translations`
      * relation is set empty (detail-only on the listing — no per-row query).
      */
-    protected function mapRowToEloquent(object $row): AdminSettingsTheme
+    protected function mapRowToEloquent(object $row): AdminSettingsSection
     {
-        $model = (new AdminSettingsTheme)->forceFill([
+        $model = (new AdminSettingsSection)->forceFill([
             'id' => (int) $row->id,
             'name' => $row->name,
             'type' => $row->type,

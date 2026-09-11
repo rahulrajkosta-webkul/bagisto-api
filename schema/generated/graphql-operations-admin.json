@@ -491,12 +491,12 @@
     "adminSettingsTheme": {
         "kind": "query",
         "tag": "Admin Settings: Themes",
-        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsTheme"
+        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsSection"
     },
     "adminSettingsThemes": {
         "kind": "query",
         "tag": "Admin Settings: Themes",
-        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsTheme"
+        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsSection"
     },
     "adminSettingsUser": {
         "kind": "query",
@@ -1192,17 +1192,17 @@
     "createAdminSettingsTheme": {
         "kind": "mutation",
         "tag": "Admin Settings: Themes",
-        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsTheme"
+        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsSection"
     },
     "createAdminSettingsThemeMassDelete": {
         "kind": "mutation",
         "tag": "Admin Settings: Themes",
-        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsThemeMassDelete"
+        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsSectionMassDelete"
     },
     "createAdminSettingsThemeMassUpdateStatus": {
         "kind": "mutation",
         "tag": "Admin Settings: Themes",
-        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsThemeMassUpdateStatus"
+        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsSectionMassUpdateStatus"
     },
     "createAdminSettingsUser": {
         "kind": "mutation",
@@ -1585,7 +1585,7 @@
     "deleteAdminSettingsTheme": {
         "kind": "mutation",
         "tag": "Admin Settings: Themes",
-        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsTheme"
+        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsSection"
     },
     "deleteAdminSettingsUser": {
         "kind": "mutation",
@@ -2087,7 +2087,7 @@
     "updateAdminSettingsTheme": {
         "kind": "mutation",
         "tag": "Admin Settings: Themes",
-        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsTheme"
+        "resource": "Webkul\\BagistoApi\\Admin\\Models\\AdminSettingsSection"
     },
     "updateAdminSettingsUser": {
         "kind": "mutation",

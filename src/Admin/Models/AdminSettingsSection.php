@@ -15,23 +15,25 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeCreateInput;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeRestDto;
-use Webkul\BagistoApi\Admin\Dto\AdminSettingsThemeUpdateInput;
-use Webkul\BagistoApi\Admin\State\AdminSettingsThemeCollectionProvider;
-use Webkul\BagistoApi\Admin\State\AdminSettingsThemeItemProvider;
-use Webkul\BagistoApi\Admin\State\AdminSettingsThemeProcessor;
-use Webkul\BagistoApi\Admin\State\AdminSettingsThemeWriteProvider;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionCreateInput;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionRestDto;
+use Webkul\BagistoApi\Admin\Dto\AdminSettingsSectionUpdateInput;
+use Webkul\BagistoApi\Admin\State\AdminSettingsSectionCollectionProvider;
+use Webkul\BagistoApi\Admin\State\AdminSettingsSectionItemProvider;
+use Webkul\BagistoApi\Admin\State\AdminSettingsSectionProcessor;
+use Webkul\BagistoApi\Admin\State\AdminSettingsSectionWriteProvider;
 
 /**
- * Admin Settings → Themes (theme customizations).
+ * Admin Settings → Themes (theme sections).
  *
- * Mirrors Webkul\Admin\Http\Controllers\Settings\ThemeController.
+ * Mirrors Webkul\Admin\Http\Controllers\Appearance\SectionController.
  *
- * Bagisto "Themes" are per-channel theme customization blocks (image carousels,
- * static content, footer links, etc.) — NOT a registry of installable themes.
- * Each row picks a `type` from a fixed set and stores arbitrary per-locale
- * `options` JSON via translation rows.
+ * Bagisto "Themes" here are per-channel theme sections (image carousels, static
+ * content, footer links, etc.) — NOT a registry of installable themes. Each row
+ * picks a `type` from a fixed set and stores arbitrary per-locale `options` JSON
+ * via translation rows. v2.4 renamed these from theme customizations to sections
+ * and moved the admin screens under Appearance; the REST paths and GraphQL names
+ * below are unchanged, so existing clients keep working.
  *
  * REST:
  *   GET    /api/admin/settings/themes
@@ -56,9 +58,9 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeWriteProvider;
     operations: [
         new Post(
             uriTemplate: '/settings/themes',
-            input: AdminSettingsThemeCreateInput::class,
-            output: AdminSettingsThemeRestDto::class,
-            processor: AdminSettingsThemeProcessor::class,
+            input: AdminSettingsSectionCreateInput::class,
+            output: AdminSettingsSectionRestDto::class,
+            processor: AdminSettingsSectionProcessor::class,
             status: 201,
             openapi: new Model\Operation(
                 tags: ['Admin Settings: Themes'],
@@ -91,9 +93,9 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeWriteProvider;
         ),
         new Put(
             uriTemplate: '/settings/themes/{id}',
-            input: AdminSettingsThemeUpdateInput::class,
-            provider: AdminSettingsThemeWriteProvider::class,
-            processor: AdminSettingsThemeProcessor::class,
+            input: AdminSettingsSectionUpdateInput::class,
+            provider: AdminSettingsSectionWriteProvider::class,
+            processor: AdminSettingsSectionProcessor::class,
             requirements: ['id' => '\d+'],
             openapi: new Model\Operation(
                 tags: ['Admin Settings: Themes'],
@@ -131,8 +133,8 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeWriteProvider;
         ),
         new Delete(
             uriTemplate: '/settings/themes/{id}',
-            provider: AdminSettingsThemeWriteProvider::class,
-            processor: AdminSettingsThemeProcessor::class,
+            provider: AdminSettingsSectionWriteProvider::class,
+            processor: AdminSettingsSectionProcessor::class,
             requirements: ['id' => '\d+'],
             status: 200,
             openapi: new Model\Operation(
@@ -149,8 +151,8 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeWriteProvider;
         ),
         new Get(
             uriTemplate: '/settings/themes/{id}',
-            provider: AdminSettingsThemeItemProvider::class,
-            output: AdminSettingsThemeRestDto::class,
+            provider: AdminSettingsSectionItemProvider::class,
+            output: AdminSettingsSectionRestDto::class,
             requirements: ['id' => '\d+'],
             openapi: new Model\Operation(
                 tags: ['Admin Settings: Themes'],
@@ -166,8 +168,8 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeWriteProvider;
         ),
         new GetCollection(
             uriTemplate: '/settings/themes',
-            provider: AdminSettingsThemeCollectionProvider::class,
-            output: AdminSettingsThemeRestDto::class,
+            provider: AdminSettingsSectionCollectionProvider::class,
+            output: AdminSettingsSectionRestDto::class,
             paginationEnabled: false,
             openapi: new Model\Operation(
                 tags: ['Admin Settings: Themes'],
@@ -192,7 +194,7 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeWriteProvider;
     ],
     graphQlOperations: [
         new QueryCollection(
-            provider: AdminSettingsThemeCollectionProvider::class,
+            provider: AdminSettingsSectionCollectionProvider::class,
             paginationType: 'cursor',
             extraArgs: [
                 'name' => ['type' => 'String'],
@@ -206,33 +208,33 @@ use Webkul\BagistoApi\Admin\State\AdminSettingsThemeWriteProvider;
             description: 'Admin settings theme customizations listing (cursor pagination).',
         ),
         new Query(
-            provider: AdminSettingsThemeItemProvider::class,
+            provider: AdminSettingsSectionItemProvider::class,
             description: 'Admin settings theme customization detail by id.',
         ),
         new Mutation(
             name: 'create',
-            input: AdminSettingsThemeCreateInput::class,
-            processor: AdminSettingsThemeProcessor::class,
+            input: AdminSettingsSectionCreateInput::class,
+            processor: AdminSettingsSectionProcessor::class,
             description: 'Create a theme customization. Becomes createAdminSettingsTheme.',
         ),
         new Mutation(
             name: 'update',
-            input: AdminSettingsThemeUpdateInput::class,
-            processor: AdminSettingsThemeProcessor::class,
+            input: AdminSettingsSectionUpdateInput::class,
+            processor: AdminSettingsSectionProcessor::class,
             description: 'Update a theme customization. Becomes updateAdminSettingsTheme.',
         ),
         new Mutation(
             name: 'delete',
-            input: AdminSettingsThemeUpdateInput::class,
-            processor: AdminSettingsThemeProcessor::class,
+            input: AdminSettingsSectionUpdateInput::class,
+            processor: AdminSettingsSectionProcessor::class,
             description: 'Delete a theme customization. Becomes deleteAdminSettingsTheme.',
         ),
     ],
 )]
-class AdminSettingsTheme extends EloquentModel
+class AdminSettingsSection extends EloquentModel
 {
     /** @var string */
-    protected $table = 'theme_customizations';
+    protected $table = 'theme_sections';
 
     /** @var array */
     protected $casts = [
@@ -247,6 +249,17 @@ class AdminSettingsTheme extends EloquentModel
     /** @var array */
     protected $appends = [
         'message',
+    ];
+
+    /**
+     * Staged edits are an admin-panel editing concern; this resource writes live values
+     * directly, so the draft columns v2.4 added are kept off the payload.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'draft_status',
+        'draft_sort_order',
     ];
 
     public ?string $actionMessage = null;
@@ -266,12 +279,12 @@ class AdminSettingsTheme extends EloquentModel
     /**
      * Per-locale theme customization translations (GraphQL connection —
      * `translations { edges { node { _id locale options } } }`). Plain HasMany
-     * over the standard FK `theme_customization_id`. `options` is dynamic
-     * theme-config JSON, kept as a scalar node field on the sub-resource.
+     * over the standard FK `section_id`. `options` is dynamic theme-config
+     * JSON, kept as a scalar node field on the sub-resource.
      */
     #[ApiProperty(writable: false)]
     public function translations(): HasMany
     {
-        return $this->hasMany(AdminSettingsThemeTranslationRef::class, 'theme_customization_id');
+        return $this->hasMany(AdminSettingsSectionTranslationRef::class, 'section_id');
     }
 }
